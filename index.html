@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LabWatch | Unified Comlab Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        .hidden { display: none; }
+        .glass-panel { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .hero-bg { background: radial-gradient(circle at top right, #1e293b, #0f172a); }
+        .pc-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .pc-card:hover:not(.occupied) { transform: translateY(-5px); }
+        .occupied { cursor: not-allowed; opacity: 0.6; grayscale: 1; }
+        .nui-pulse { animation: pulse-blue 2s infinite; }
+        @keyframes pulse-blue {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200">
+
+    <div id="stage-landing">
+        <nav class="fixed w-full z-50 glass-panel px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center"><i class="fas fa-microchip text-white text-xs"></i></div>
+                <span class="text-xl font-extrabold tracking-tighter text-white uppercase">LabWatch</span>
+            </div>
+            <button onclick="navToAuth()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-bold transition">Launch System</button>
+        </nav>
+
+        <section class="hero-bg min-h-screen flex items-center pt-20">
+            <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-6xl md:text-8xl font-black text-white leading-tight tracking-tighter">Lab <span class="text-blue-500 underline decoration-4 decoration-blue-500/30">Intelligence.</span></h1>
+                    <p class="text-slate-400 mt-8 text-lg leading-relaxed italic">Smart monitoring, instant reporting, and seamless reservations for the modern computer lab.</p>
+                    <div class="flex gap-4 mt-12">
+                        <button onclick="navToAuth()" class="bg-white text-slate-950 px-10 py-5 rounded-2xl font-black hover:bg-blue-50 transition shadow-xl">Portal Access</button>
+                    </div>
+                </div>
+                <div class="hidden md:block bg-slate-800/30 p-8 rounded-[3rem] border border-slate-700">
+                    <div class="bg-slate-900 rounded-3xl p-8 border border-slate-700 shadow-2xl">
+                        <div class="flex justify-between items-center mb-8">
+                            <span class="text-[10px] font-black text-blue-400 uppercase tracking-widest">Live Network Health</span>
+                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="h-3 bg-slate-800 rounded-full"><div class="bg-blue-600 h-full w-[70%] rounded-full"></div></div>
+                            <div class="h-3 bg-slate-800 rounded-full"><div class="bg-emerald-500 h-full w-[40%] rounded-full"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="stage-auth" class="hidden min-h-screen flex items-center justify-center hero-bg p-6">
+        <div class="max-w-md w-full glass-panel p-10 rounded-[2.5rem] shadow-2xl">
+            
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-600 text-white rounded-2xl mb-4 nui-pulse"><i class="fas fa-fingerprint text-2xl"></i></div>
+                <h2 class="text-3xl font-black text-white" id="auth-title">Welcome Back</h2>
+                <p class="text-slate-500 text-sm mt-2" id="auth-subtitle">Login to your account</p>
+            </div>
+
+            <form id="loginForm" class="space-y-5">
+                <input type="text" id="loginUser" required placeholder="User ID / Name" class="w-full px-6 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl outline-none text-white focus:ring-2 focus:ring-blue-500 transition">
+                <input type="password" id="loginPass" required placeholder="Access Code" class="w-full px-6 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl outline-none text-white focus:ring-2 focus:ring-blue-500 transition">
+                <button type="submit" class="w-full bg-blue-600 text-white py-5 rounded-2xl font-black hover:bg-blue-500 transition-all shadow-lg active:scale-95 uppercase tracking-widest">Sign In</button>
+            </form>
+
+            <form id="signupForm" class="space-y-5 hidden">
+                <input type="text" id="regUser" required placeholder="Create User ID / Name" class="w-full px-6 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl outline-none text-white focus:ring-2 focus:ring-blue-500 transition">
+                <input type="password" id="regPass" required placeholder="Create Access Code" class="w-full px-6 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl outline-none text-white focus:ring-2 focus:ring-blue-500 transition">
+                <button type="submit" class="w-full bg-emerald-600 text-white py-5 rounded-2xl font-black hover:bg-emerald-500 transition-all shadow-lg active:scale-95 uppercase tracking-widest">Create Account</button>
+            </form>
+
+            <div class="mt-8 text-center">
+                <button onclick="toggleAuthMode()" id="auth-toggle-btn" class="text-xs font-bold text-slate-500 hover:text-blue-400 transition uppercase tracking-widest underline underline-offset-8">Don't have an account? Sign Up</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="stage-dashboard" class="hidden min-h-screen flex flex-col md:flex-row bg-slate-50 text-slate-900">
+        <aside class="w-full md:w-72 bg-slate-900 text-white flex flex-col p-8">
+            <h2 class="text-2xl font-black italic tracking-tighter mb-12">LABWATCH.</h2>
+            <nav class="space-y-2 flex-1">
+                <button class="w-full flex items-center p-4 bg-blue-600 rounded-2xl text-white font-bold"><i class="fas fa-desktop mr-4"></i> Monitoring</button>
+                <button onclick="reportGeneral()" class="w-full flex items-center p-4 text-slate-400 hover:bg-slate-800 rounded-2xl transition"><i class="fas fa-tools mr-4 text-orange-400"></i> Report Facility Issue</button>
+            </nav>
+            <div class="mt-auto p-6 bg-slate-800/50 rounded-3xl border border-slate-700">
+                <p id="userNameLabel" class="font-bold text-white truncate"></p>
+                <button onclick="logout()" class="mt-4 text-red-400 text-xs font-bold uppercase tracking-widest hover:text-red-300"><i class="fas fa-power-off mr-2"></i> Log Out</button>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto p-8 md:p-12">
+            <header class="flex justify-between items-end mb-12">
+                <div>
+                    <h3 class="text-4xl font-black tracking-tight">Active Terminals</h3>
+                    <p class="text-slate-500 mt-2">Mobile-first surveillance for hardware and seat availability.</p>
+                </div>
+                <div class="bg-white px-6 py-4 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-3">
+                    <div class="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
+                    <span id="stats-available" class="font-black text-xl">0</span> <span class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Ready</span>
+                </div>
+            </header>
+            <div id="pc-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6"></div>
+        </main>
+    </div>
+
+    <script>
+        let isLoginMode = true;
+        let currentUser = sessionStorage.getItem('active_session');
+        
+        // Load existing accounts from localStorage
+        const accounts = JSON.parse(localStorage.getItem('labwatch_accounts')) || {};
+
+        const stations = Array.from({ length: 18 }, (_, i) => ({
+            id: `PC-${(i + 1).toString().padStart(2, '0')}`,
+            status: Math.random() > 0.8 ? 'in-use' : 'available',
+            occupant: null,
+            isBroken: false
+        }));
+
+        window.onload = () => { if (currentUser) showDashboard(currentUser); };
+
+        function navToAuth() {
+            document.getElementById('stage-landing').classList.add('hidden');
+            document.getElementById('stage-auth').classList.remove('hidden');
+        }
+
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            document.getElementById('auth-title').innerText = isLoginMode ? "Welcome Back" : "Register Monitor";
+            document.getElementById('auth-subtitle').innerText = isLoginMode ? "Login to your account" : "Create a new lab account";
+            document.getElementById('loginForm').classList.toggle('hidden', !isLoginMode);
+            document.getElementById('signupForm').classList.toggle('hidden', isLoginMode);
+            document.getElementById('auth-toggle-btn').innerText = isLoginMode ? "Don't have an account? Sign Up" : "Already registered? Login";
+        }
+
+        // Handle Signup
+        document.getElementById('signupForm').onsubmit = (e) => {
+            e.preventDefault();
+            const user = document.getElementById('regUser').value;
+            const pass = document.getElementById('regPass').value;
+
+            if (accounts[user]) {
+                alert("Account already exists!");
+            } else {
+                accounts[user] = pass;
+                localStorage.setItem('labwatch_accounts', JSON.stringify(accounts));
+                alert("Account created successfully! Please Login.");
+                toggleAuthMode();
+            }
+        };
+
+        // Handle Login
+        document.getElementById('loginForm').onsubmit = (e) => {
+            e.preventDefault();
+            const user = document.getElementById('loginUser').value;
+            const pass = document.getElementById('loginPass').value;
+
+            if (accounts[user] && accounts[user] === pass) {
+                sessionStorage.setItem('active_session', user);
+                showDashboard(user);
+            } else {
+                alert("Invalid credentials. Please try again.");
+            }
+        };
+
+        function showDashboard(name) {
+            currentUser = name;
+            document.getElementById('stage-landing').classList.add('hidden');
+            document.getElementById('stage-auth').classList.add('hidden');
+            document.getElementById('stage-dashboard').classList.remove('hidden');
+            document.getElementById('userNameLabel').innerText = name;
+            document.body.className = "bg-slate-50 text-slate-900";
+            renderGrid();
+        }
+
+        function logout() { sessionStorage.removeItem('active_session'); location.reload(); }
+
+        function renderGrid() {
+            const grid = document.getElementById('pc-grid');
+            grid.innerHTML = '';
+            document.getElementById('stats-available').innerText = stations.filter(s => s.status === 'available' && !s.isBroken).length;
+
+            stations.forEach(pc => {
+                const isMine = pc.occupant === currentUser;
+                const isOccupied = pc.status === 'in-use';
+                const card = document.createElement('div');
+                card.className = `pc-card p-6 rounded-[2.5rem] border-2 flex flex-col items-center justify-center text-center shadow-sm 
+                    ${pc.isBroken ? 'bg-orange-50 border-orange-200 opacity-80' : 
+                      isMine ? 'bg-blue-600 border-blue-400 text-white z-10 scale-105 shadow-2xl' : 
+                      isOccupied ? 'bg-slate-100 border-transparent text-slate-400 occupied' : 'bg-white border-white hover:border-blue-400'}`;
+
+                card.innerHTML = `
+                    <div class="w-12 h-12 rounded-xl mb-4 flex items-center justify-center ${pc.isBroken ? 'bg-orange-200 text-orange-700' : isMine ? 'bg-white/20' : 'bg-blue-50 text-blue-600'}">
+                        <i class="fas ${pc.isBroken ? 'fa-tools' : isMine ? 'fa-user-check' : 'fa-desktop'}"></i>
+                    </div>
+                    <span class="text-xl font-black">${pc.id}</span>
+                    <span class="text-[10px] mt-1 font-bold uppercase tracking-widest opacity-60">
+                        ${pc.isBroken ? 'Maintenance' : isMine ? 'Active' : isOccupied ? 'Occupied' : 'Ready'}
+                    </span>
+                    <div class="mt-4 flex gap-2">
+                        <button onclick="event.stopPropagation(); toggleStation('${pc.id}')" class="text-[9px] font-black uppercase px-3 py-1.5 rounded-lg ${isMine ? 'bg-white text-blue-600' : 'bg-slate-100 text-slate-700'}">${isMine ? 'Release' : 'Use'}</button>
+                        <button onclick="event.stopPropagation(); reportPC('${pc.id}')" class="text-[9px] font-black uppercase px-3 py-1.5 rounded-lg bg-orange-100 text-orange-600 border border-orange-200">Report</button>
+                    </div>`;
+                grid.appendChild(card);
+            });
+        }
+
+        function toggleStation(id) {
+            const pc = stations.find(s => s.id === id);
+            if (pc.isBroken) return alert("Station undergoing repairs.");
+            if (pc.status === 'available') {
+                stations.forEach(s => { if(s.occupant === currentUser) { s.status = 'available'; s.occupant = null; } });
+                pc.status = 'in-use'; pc.occupant = currentUser;
+            } else if (pc.occupant === currentUser) {
+                pc.status = 'available'; pc.occupant = null;
+            } else { alert("Occupied."); }
+            renderGrid();
+        }
+
+        function reportPC(id) {
+            const pc = stations.find(s => s.id === id);
+            if(confirm(`Report ${id} as malfunctioning?`)) { pc.isBroken = true; pc.status = 'maintenance'; renderGrid(); }
+        }
+
+        function reportGeneral() { prompt("Describe the facility issue:"); alert("Administrator notified."); }
+    </script>
+</body>
+</html>
